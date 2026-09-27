@@ -1,0 +1,123 @@
+.sp-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.sp-form-card,
+.sp-list-card {
+  padding: 22px 24px;
+
+  h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+}
+
+.sp-list-card__empty {
+  color: var(--sp-text-muted);
+  font-size: 0.875rem;
+  padding: 10px 0;
+}
+
+.sp-purchase-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  > li {
+    border-bottom: 1px solid var(--sp-border);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.sp-purchase-summary {
+  width: 100%;
+  border: none;
+  background: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  cursor: pointer;
+  text-align: left;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  strong {
+    font-size: 0.9rem;
+    color: var(--sp-text);
+  }
+
+  span {
+    font-size: 0.775rem;
+    color: var(--sp-text-muted);
+  }
+}
+
+.sp-purchase-summary__chevron {
+  color: var(--sp-orange);
+  font-weight: 700;
+  transition: transform 0.15s ease;
+
+  &.is-open {
+    transform: rotate(180deg);
+  }
+}
+
+.sp-installment-list {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 4px 0 0 8px;
+  border-left: 2px solid var(--sp-orange-soft);
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0 10px 12px;
+    gap: 12px;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    strong {
+      font-size: 0.85rem;
+    }
+
+    span {
+      font-size: 0.75rem;
+      color: var(--sp-text-muted);
+    }
+  }
+}
+
+.sp-list-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.sp-btn--sm {
+  padding: 6px 12px;
+  font-size: 0.775rem;
+}
+
+@media (max-width: 760px) {
+  .sp-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,26 @@
+<div class="sp-shell">
+  <aside class="sp-sidebar">
+    <div class="sp-sidebar__brand">
+      <app-logo size="lg" />
+    </div>
+    <nav class="sp-sidebar__nav">
+      @for (item of navItems; track item.path) {
+        <a [routerLink]="item.path" routerLinkActive="is-active" class="sp-sidebar__link">
+          <span class="sp-sidebar__icon">{{ item.icon }}</span>
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+    <div class="sp-sidebar__footer">
+      <div class="sp-sidebar__user">
+        <span class="sp-sidebar__avatar">{{ (auth.username() ?? '?').charAt(0).toUpperCase() }}</span>
+        <span>{{ auth.username() }}</span>
+      </div>
+      <button class="sp-btn sp-btn--ghost sp-sidebar__logout" type="button" (click)="logout()">Sair</button>
+    </div>
+  </aside>
+
+  <main class="sp-content">
+    <router-outlet />
+  </main>
+</div>

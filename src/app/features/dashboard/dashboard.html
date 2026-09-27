@@ -1,0 +1,54 @@
+<div class="sp-page">
+  <div class="sp-page-header">
+    <h1>Olá, {{ wallet()?.username }} 👋</h1>
+    <p>Este é o resumo da sua carteira ShopPay.</p>
+  </div>
+
+  <section class="sp-balance-card sp-card">
+    <div>
+      <span class="sp-balance-card__label">Saldo disponível</span>
+      <strong class="sp-balance-card__amount">{{ wallet()?.balance ?? '0' | currency: 'BRL' }}</strong>
+    </div>
+    <div class="sp-balance-card__pix">
+      <span class="sp-balance-card__label">Sua chave Pix</span>
+      <code>{{ wallet()?.pix_key ?? '—' }}</code>
+    </div>
+  </section>
+
+  <section class="sp-shortcuts">
+    @for (item of shortcuts; track item.path) {
+      <a class="sp-shortcut sp-card" [routerLink]="item.path">
+        <span class="sp-shortcut__icon">{{ item.icon }}</span>
+        <span class="sp-shortcut__label">{{ item.label }}</span>
+        <span class="sp-shortcut__hint">{{ item.hint }}</span>
+      </a>
+    }
+  </section>
+
+  <section class="sp-card sp-recent">
+    <div class="sp-recent__header">
+      <h2>Últimas movimentações</h2>
+      <a routerLink="/extrato">Ver extrato completo</a>
+    </div>
+
+    @if (loading()) {
+      <p class="sp-recent__empty">Carregando…</p>
+    } @else if (transactions().length === 0) {
+      <p class="sp-recent__empty">Nenhuma movimentação ainda.</p>
+    } @else {
+      <ul class="sp-recent__list">
+        @for (tx of transactions(); track tx.id) {
+          <li>
+            <div>
+              <strong>{{ tx.description }}</strong>
+              <span>{{ tx.created_at | date: 'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            <span class="sp-recent__amount" [class.is-credit]="tx.kind === 'CREDIT'">
+              {{ tx.kind === 'CREDIT' ? '+' : '-' }}{{ tx.amount | currency: 'BRL' }}
+            </span>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</div>

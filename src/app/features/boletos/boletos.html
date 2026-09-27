@@ -1,0 +1,65 @@
+<div class="sp-page">
+  <div class="sp-page-header">
+    <h1>Boletos</h1>
+    <p>Emita boletos e simule o pagamento debitando o saldo da carteira.</p>
+  </div>
+
+  <div class="sp-grid">
+    <section class="sp-card sp-form-card">
+      <h2>Emitir boleto</h2>
+
+      <form [formGroup]="form" (ngSubmit)="create()">
+        <div class="sp-field">
+          <label class="sp-label" for="boleto-desc">Descrição</label>
+          <input id="boleto-desc" class="sp-input" type="text" formControlName="description" placeholder="Ex.: Conta de luz" />
+        </div>
+        <div class="sp-field">
+          <label class="sp-label" for="boleto-amount">Valor (R$)</label>
+          <input id="boleto-amount" class="sp-input" type="number" step="0.01" min="0.01" formControlName="amount" />
+        </div>
+        <div class="sp-field">
+          <label class="sp-label" for="boleto-due">Vencimento</label>
+          <input id="boleto-due" class="sp-input" type="date" formControlName="due_date" />
+        </div>
+        <button class="sp-btn sp-btn--primary" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Emitindo…' : 'Emitir boleto' }}
+        </button>
+      </form>
+    </section>
+
+    <section class="sp-card sp-list-card">
+      <h2>Boletos emitidos</h2>
+
+      @if (loading()) {
+        <p class="sp-list-card__empty">Carregando…</p>
+      } @else if (boletos().length === 0) {
+        <p class="sp-list-card__empty">Nenhum boleto emitido ainda.</p>
+      } @else {
+        <ul class="sp-list-card__list">
+          @for (boleto of boletos(); track boleto.id) {
+            <li>
+              <div>
+                <strong>{{ boleto.description }}</strong>
+                <span>{{ boleto.amount | currency: 'BRL' }} · vence em {{ boleto.due_date | date: 'dd/MM/yyyy' }}</span>
+                <code class="sp-barcode">{{ boleto.barcode }}</code>
+              </div>
+              <div class="sp-list-card__actions">
+                <app-status-badge [status]="boleto.status" />
+                @if (boleto.status !== 'PAID') {
+                  <button
+                    class="sp-btn sp-btn--secondary sp-btn--sm"
+                    type="button"
+                    [disabled]="payingId() === boleto.id"
+                    (click)="pay(boleto)"
+                  >
+                    {{ payingId() === boleto.id ? 'Pagando…' : 'Pagar' }}
+                  </button>
+                }
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<div class="sp-page">
+  <div class="sp-page-header">
+    <h1>Extrato</h1>
+    <p>Todas as movimentações da sua carteira.</p>
+  </div>
+
+  <div class="sp-tabs">
+    <button class="sp-tabs__item" [class.is-active]="filter() === 'ALL'" (click)="setFilter('ALL')">Todas</button>
+    <button class="sp-tabs__item" [class.is-active]="filter() === 'CREDIT'" (click)="setFilter('CREDIT')">Entradas</button>
+    <button class="sp-tabs__item" [class.is-active]="filter() === 'DEBIT'" (click)="setFilter('DEBIT')">Saídas</button>
+  </div>
+
+  <section class="sp-card sp-statement">
+    @if (loading()) {
+      <p class="sp-statement__empty">Carregando…</p>
+    } @else if (filtered().length === 0) {
+      <p class="sp-statement__empty">Nenhuma movimentação encontrada.</p>
+    } @else {
+      <ul class="sp-statement__list">
+        @for (tx of filtered(); track tx.id) {
+          <li>
+            <div class="sp-statement__info">
+              <strong>{{ tx.description }}</strong>
+              <span>{{ tx.created_at | date: 'dd/MM/yyyy HH:mm' }} · saldo após: {{ tx.balance_after | currency: 'BRL' }}</span>
+            </div>
+            <span class="sp-statement__amount" [class.is-credit]="tx.kind === 'CREDIT'">
+              {{ tx.kind === 'CREDIT' ? '+' : '-' }}{{ tx.amount | currency: 'BRL' }}
+            </span>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</div>

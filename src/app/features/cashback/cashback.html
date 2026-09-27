@@ -1,0 +1,55 @@
+<div class="sp-page">
+  <div class="sp-page-header">
+    <h1>Cashback</h1>
+    <p>Regras ativas e valores já creditados na sua carteira.</p>
+  </div>
+
+  <section class="sp-total-card sp-card">
+    <span>Total recebido em cashback</span>
+    <strong>{{ totalCredited() | currency: 'BRL' }}</strong>
+  </section>
+
+  <div class="sp-grid">
+    <section class="sp-card sp-rules-card">
+      <h2>Regras ativas</h2>
+
+      @if (rules().length === 0) {
+        <p class="sp-empty">Nenhuma regra cadastrada.</p>
+      } @else {
+        <ul class="sp-rules-list">
+          @for (rule of rules(); track rule.id) {
+            <li>
+              <div>
+                <strong>{{ rule.name }}</strong>
+                <span>Mínimo de {{ rule.min_purchase_amount | currency: 'BRL' }} em compras</span>
+              </div>
+              <span class="sp-rule-pct">{{ rule.percentage }}%</span>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+    <section class="sp-card sp-credits-card">
+      <h2>Créditos recebidos</h2>
+
+      @if (loading()) {
+        <p class="sp-empty">Carregando…</p>
+      } @else if (credits().length === 0) {
+        <p class="sp-empty">Nenhum cashback creditado ainda.</p>
+      } @else {
+        <ul class="sp-credits-list">
+          @for (credit of credits(); track credit.id) {
+            <li>
+              <div>
+                <strong>{{ credit.merchant }}</strong>
+                <span>{{ credit.created_at | date: 'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+              <span class="sp-credit-amount">+{{ credit.amount | currency: 'BRL' }}</span>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  </div>
+</div>

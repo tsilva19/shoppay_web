@@ -1,0 +1,34 @@
+<div class="sp-login">
+  <div class="sp-login__card sp-card">
+    <div class="sp-login__brand">
+      <app-logo size="lg" />
+      <p>Sua carteira digital simulada</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="sp-field">
+        <label class="sp-label" for="username">Usuário</label>
+        <input id="username" class="sp-input" type="text" formControlName="username" autocomplete="username" />
+      </div>
+
+      <div class="sp-field">
+        <label class="sp-label" for="password">Senha</label>
+        <input id="password" class="sp-input" type="password" formControlName="password" autocomplete="current-password" />
+      </div>
+
+      @if (errorMessage()) {
+        <p class="sp-login__error">{{ errorMessage() }}</p>
+      }
+
+      <button class="sp-btn sp-btn--primary sp-login__submit" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Entrando…' : 'Entrar' }}
+      </button>
+    </form>
+
+    <div class="sp-login__hint">
+      <strong>Usuários de exemplo</strong> (seed_demo)
+      <code>thiago / thiago123</code>
+      <code>loja_parceira / loja123</code>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,113 @@
+<div class="sp-page">
+  <div class="sp-page-header">
+    <h1>Pix</h1>
+    <p>Gere cobranças para receber ou envie transferências para outra carteira.</p>
+  </div>
+
+  <div class="sp-tabs">
+    <button class="sp-tabs__item" [class.is-active]="tab() === 'charges'" (click)="setTab('charges')">Cobranças</button>
+    <button class="sp-tabs__item" [class.is-active]="tab() === 'transfers'" (click)="setTab('transfers')">Transferências</button>
+  </div>
+
+  @if (tab() === 'charges') {
+    <div class="sp-grid">
+      <section class="sp-card sp-form-card">
+        <h2>Gerar cobrança Pix</h2>
+        <p class="sp-form-card__hint">Use para simular a adição de saldo na carteira.</p>
+
+        <form [formGroup]="chargeForm" (ngSubmit)="createCharge()">
+          <div class="sp-field">
+            <label class="sp-label" for="charge-amount">Valor (R$)</label>
+            <input id="charge-amount" class="sp-input" type="number" step="0.01" min="0.01" formControlName="amount" />
+          </div>
+          <div class="sp-field">
+            <label class="sp-label" for="charge-desc">Descrição (opcional)</label>
+            <input id="charge-desc" class="sp-input" type="text" formControlName="description" placeholder="Ex.: Adicionar saldo" />
+          </div>
+          <button class="sp-btn sp-btn--primary" type="submit" [disabled]="savingCharge()">
+            {{ savingCharge() ? 'Gerando…' : 'Gerar cobrança' }}
+          </button>
+        </form>
+      </section>
+
+      <section class="sp-card sp-list-card">
+        <h2>Cobranças geradas</h2>
+
+        @if (loading()) {
+          <p class="sp-list-card__empty">Carregando…</p>
+        } @else if (charges().length === 0) {
+          <p class="sp-list-card__empty">Nenhuma cobrança gerada ainda.</p>
+        } @else {
+          <ul class="sp-list-card__list">
+            @for (charge of charges(); track charge.id) {
+              <li>
+                <div>
+                  <strong>{{ charge.amount | currency: 'BRL' }}</strong>
+                  <span>{{ charge.description || 'Cobrança Pix' }} · {{ charge.created_at | date: 'dd/MM HH:mm' }}</span>
+                </div>
+                <div class="sp-list-card__actions">
+                  <app-status-badge [status]="charge.status" />
+                  @if (charge.status === 'PENDING') {
+                    <button
+                      class="sp-btn sp-btn--secondary sp-btn--sm"
+                      type="button"
+                      [disabled]="payingId() === charge.id"
+                      (click)="payCharge(charge)"
+                    >
+                      {{ payingId() === charge.id ? 'Pagando…' : 'Simular pagamento' }}
+                    </button>
+                  }
+                </div>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    </div>
+  } @else {
+    <div class="sp-grid">
+      <section class="sp-card sp-form-card">
+        <h2>Enviar Pix</h2>
+        <p class="sp-form-card__hint">Informe a chave Pix de destino e o valor.</p>
+
+        <form [formGroup]="transferForm" (ngSubmit)="createTransfer()">
+          <div class="sp-field">
+            <label class="sp-label" for="transfer-key">Chave Pix de destino</label>
+            <input id="transfer-key" class="sp-input" type="text" formControlName="to_pix_key" />
+          </div>
+          <div class="sp-field">
+            <label class="sp-label" for="transfer-amount">Valor (R$)</label>
+            <input id="transfer-amount" class="sp-input" type="number" step="0.01" min="0.01" formControlName="amount" />
+          </div>
+          <div class="sp-field">
+            <label class="sp-label" for="transfer-desc">Descrição (opcional)</label>
+            <input id="transfer-desc" class="sp-input" type="text" formControlName="description" />
+          </div>
+          <button class="sp-btn sp-btn--primary" type="submit" [disabled]="savingTransfer()">
+            {{ savingTransfer() ? 'Enviando…' : 'Enviar Pix' }}
+          </button>
+        </form>
+      </section>
+
+      <section class="sp-card sp-list-card">
+        <h2>Transferências enviadas</h2>
+
+        @if (transfers().length === 0) {
+          <p class="sp-list-card__empty">Nenhuma transferência enviada ainda.</p>
+        } @else {
+          <ul class="sp-list-card__list">
+            @for (transfer of transfers(); track transfer.id) {
+              <li>
+                <div>
+                  <strong>{{ transfer.amount | currency: 'BRL' }}</strong>
+                  <span>{{ transfer.description || 'Transferência Pix' }} · {{ transfer.created_at | date: 'dd/MM HH:mm' }}</span>
+                </div>
+                <app-status-badge [status]="transfer.status" />
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    </div>
+  }
+</div>

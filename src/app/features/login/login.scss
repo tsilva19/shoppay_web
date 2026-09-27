@@ -1,0 +1,60 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(160deg, var(--sp-blue-soft) 0%, var(--sp-bg) 45%, var(--sp-orange-soft) 100%);
+  padding: 24px;
+}
+
+.sp-login__card {
+  width: 100%;
+  max-width: 380px;
+  padding: 32px 30px;
+}
+
+.sp-login__brand {
+  text-align: center;
+  margin-bottom: 26px;
+
+  p {
+    margin-top: 6px;
+    color: var(--sp-text-muted);
+    font-size: 0.85rem;
+  }
+}
+
+.sp-login__submit {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.sp-login__error {
+  color: var(--sp-danger);
+  font-size: 0.825rem;
+  margin: -4px 0 12px;
+  font-weight: 600;
+}
+
+.sp-login__hint {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--sp-border);
+  font-size: 0.75rem;
+  color: var(--sp-text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  strong {
+    color: var(--sp-text);
+    font-size: 0.75rem;
+  }
+
+  code {
+    background: var(--sp-bg);
+    border-radius: 4px;
+    padding: 2px 6px;
+    width: fit-content;
+  }
+}
